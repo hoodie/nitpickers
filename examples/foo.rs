@@ -1,5 +1,5 @@
 #![feature(plugin)]
-#![plugin(api_diff)]
+#![plugin(nitpickers)]
 
 pub fn lintme() { }
 
