@@ -1,0 +1,9 @@
+[package]
+name = "nitpickers"
+version = "0.1.0"
+authors = ["Gilbert Röhrbein <gilbert@ifsr.de>"]
+
+[lib]
+name = "nitpickers"
+crate-type = ["dylib"]
+plugin = true
