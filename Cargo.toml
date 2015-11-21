@@ -3,6 +3,11 @@ name = "nitpickers"
 version = "0.1.0"
 authors = ["Gilbert Röhrbein <gilbert@ifsr.de>"]
 
+license = "Apache-2.0/MIT"
+# these licenses resemble the rustc licenses
+
+description = "Work in slow progress! nitpickers is a rust experiment to get public api details of an crate and complain about changes, inconsistencies and everything. It is implemented as a collection of LintPasses and small tool programs."
+
 [lib]
 name = "nitpickers"
 crate-type = ["dylib"]
