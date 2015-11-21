@@ -7,32 +7,34 @@ extern crate syntax;
 #[macro_use]
 extern crate rustc;
 
+extern crate rustc_front;
+
 use syntax::ast;
-use rustc::lint::{Context, LintPass, LintPassObject, LintArray};
+use rustc::lint::{LateContext, LintPass, LateLintPass, LateLintPassObject, LintArray};
 use rustc::plugin::Registry;
+use rustc_front::hir;
 
 declare_lint!(TEST_LINT, Warn, "  :-/  ");
 
-struct Pass;
+struct PublicInterfaceStabilityCheck;
 
-impl LintPass for Pass {
+impl LintPass for PublicInterfaceStabilityCheck {
     fn get_lints(&self) -> LintArray {
         lint_array!(TEST_LINT)
     }
+}
 
-    fn check_item(&mut self, _/*cx*/: &Context, it: &ast::Item) {
-        //if it.ident.name.as_str() == "lintme" {
-        //    cx.span_lint(TEST_LINT, it.span, "item is named 'lintme'");
-        //}
-        
-        let name = it.ident.name.as_str();
-        if it.vis == ast::Visibility::Public {
-            println!("pub {}", name);
+impl LateLintPass for PublicInterfaceStabilityCheck {
+    fn check_crate(&mut self, ctx: &LateContext, _: &hir::Crate) {
+        for item_id in ctx.exported_items {
+            if let Some(item) = ctx.tcx.map.find(*item_id) {
+                println!("pub {:#?}", item);
+            }
         }
     }
 }
 
 #[plugin_registrar]
 pub fn plugin_registrar(reg: &mut Registry) {
-    reg.register_lint_pass(box Pass as LintPassObject);
+    reg.register_late_lint_pass(box PublicInterfaceStabilityCheck as LateLintPassObject);
 }
