@@ -7,4 +7,7 @@ pub struct StructOne {
     pub foo : i32
 }
 
+pub trait FooTrait {
+}
+
 fn main() {}
